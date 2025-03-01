@@ -7,7 +7,12 @@
   const password = '[your-password-here]'; // const password = 'YourComplexAppPassw0rd';
   const timerDuration = 3600; // Timer duration in seconds (1 hour = 3600 seconds), set to null to change status permanently
   const blockingStatus = false; // true to enable blocking, false to disable
-  
+  const includeLogout = false; // set to true to logout the session authorized to make this call after the blocking status is set
+  // *includeLogout may give you errors depending on where you run the bookmarklet from
+  const includeSuccessAlert = false; // set to true to show an alert after the blocking status is set
+  const includeErrorAlert = false; // set to true to show an alert after the blocking status is set
+
+ // Create the authentication payload
   // Create the authentication payload
   const authPayload = {
     password: password
@@ -52,11 +57,33 @@
   })
   .then(blockingData => {
     const action = blockingStatus ? 'enabled' : 'disabled';
-    alert(`Pi-hole blocking has been ${action}!`);
+    if (includeSuccessAlert) {
+      let message = `Pi-hole blocking has been ${action}`;
+      
+      // Add timer information if disabling with a timer
+      if (!blockingStatus && timerDuration !== null) {
+        // Format the duration in a human-readable way
+        let formattedDuration;
+        if (timerDuration >= 86400) {
+          formattedDuration = `${Math.floor(timerDuration / 86400)} day(s)`;
+        } else if (timerDuration >= 3600) {
+          formattedDuration = `${Math.floor(timerDuration / 3600)} hour(s)`;
+        } else if (timerDuration >= 60) {
+          formattedDuration = `${Math.floor(timerDuration / 60)} minute(s)`;
+        } else {
+          formattedDuration = `${timerDuration} second(s)`;
+        }
+        message += ` for ${formattedDuration}`;
+      }
+      
+      alert(`${message}!`);
+    }
   })
   .catch(error => {
     console.error('Operation failed:', error);
-    alert('Operation failed: ' + error.message);
+    if (includeErrorAlert) {
+      alert('Operation failed: ' + error.message);
+    }
   });
   
   // Function to set blocking status
@@ -84,6 +111,10 @@
   
   // Function to logout
   function logout(sid) {
+    if (!includeLogout) {
+      return Promise.resolve();
+    }
+    
     const logoutUrl = `${baseUrl}/api/auth?sid=${encodeURIComponent(sid)}`;
     
     return fetch(logoutUrl, {
