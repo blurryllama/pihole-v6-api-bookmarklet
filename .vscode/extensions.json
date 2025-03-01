@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "ms-vscode.js-debug",
+    "ms-vscode.vscode-js-profile-flame",
+    "firefox-devtools.vscode-firefox-debug",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode"
+  ]
+} 

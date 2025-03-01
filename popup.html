@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pi-hole v6 Controller</title>
+  <meta charset="utf-8">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      width: 300px;
+      padding: 10px;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    label {
+      font-weight: bold;
+    }
+    input, select {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    #enableBtn {
+      background-color: #4CAF50;
+      color: white;
+    }
+    #disableBtn {
+      background-color: #f44336;
+      color: white;
+    }
+    .status {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 4px;
+      text-align: center;
+    }
+    .success {
+      background-color: #dff0d8;
+      color: #3c763d;
+    }
+    .error {
+      background-color: #f2dede;
+      color: #a94442;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Pi-hole v6 Controller</h2>
+    
+    <div class="form-group">
+      <label for="baseUrl">Pi-hole URL:</label>
+      <input type="text" id="baseUrl" placeholder="http://pi.hole or IP address">
+    </div>
+    
+    <div class="form-group">
+      <label for="password">Password:</label>
+      <input type="password" id="password" placeholder="Your Pi-hole password">
+    </div>
+    
+    <div class="form-group">
+      <label for="duration">Disable Duration:</label>
+      <select id="duration">
+        <option value="0">Permanent</option>
+        <option value="300">5 minutes</option>
+        <option value="600">10 minutes</option>
+        <option value="1800">30 minutes</option>
+        <option value="3600" selected>1 hour</option>
+        <option value="7200">2 hours</option>
+        <option value="86400">1 day</option>
+      </select>
+    </div>
+    
+    <div class="buttons">
+      <button id="enableBtn">Enable Blocking</button>
+      <button id="disableBtn">Disable Blocking</button>
+    </div>
+    
+    <div id="status" class="status" style="display: none;"></div>
+  </div>
+  
+  <script src="browser-polyfill.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html> 

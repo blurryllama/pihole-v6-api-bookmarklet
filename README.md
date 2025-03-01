@@ -1,84 +1,113 @@
-# Pi-hole v6 API Bookmarklet
+# Pi-hole v6 Controller Browser Extension
 
-This repository provides a simple way to control your Pi-hole v6 using bookmarklets. You can quickly enable or disable Pi-hole blocking with a single click from your browser.
+A browser extension that allows you to control your Pi-hole v6 blocking status directly from your browser. This extension works with Chrome, Edge, and Firefox.
 
-## How to Use
+## Features
 
-### Step 1: Customize the Code
+- Enable/disable Pi-hole DNS blocking with a single click
+- Set custom disable duration (permanent, 5 minutes, 10 minutes, 30 minutes, 1 hour, 2 hours, or 1 day)
+- Securely store your Pi-hole URL and password in your browser's storage
+- Works with Pi-hole v6 API
 
-1. Copy the JavaScript code from `api-call-sample.js` to a text editor
-2. Update the following configuration variables:
-   - `baseUrl`: Your Pi-hole IP address or domain (e.g., `'https://192.168.1.1'` or `'http://pi.hole'`)
-   - `password`: Your Pi-hole password or app password
-   - `timerDuration`: How long to disable Pi-hole (in seconds), or set to `null` for permanent change
-   - `blockingStatus`: Set to `true` to enable blocking or `false` to disable blocking
-   - `includeLogout`: Set to `true` to logout the session after the API call (default is `false`)
-   - `includeSuccessAlert`: Set to `true` to show a success alert message (default is `true`)
-   - `includeErrorAlert`: Set to `true` to show an error alert message if the operation fails (default is `true`)
+## Installation
 
-### Step 2: Create the Bookmarklet
+### Chrome and Edge
 
-1. Go to [Bookmarkleter](https://chriszarate.github.io/bookmarkleter/) (or similar tool)
-2. Paste your customized JavaScript code into the text area
-3. Configure the options:
-   - Check "URL-encode reserved characters"
-   - Check "Wrap in an IIFE"
-   - Optionally check "Mangle variables and remove dead code" to reduce size
-4. Click "Bookmarklet" to generate the bookmarklet code
+1. Download or clone this repository
+2. Open Chrome/Edge and navigate to `chrome://extensions` (Chrome) or `edge://extensions` (Edge)
+3. Enable "Developer mode" in the top-right corner
+4. Click "Load unpacked" and select the folder containing the extension files
+5. The extension should now be installed and visible in your browser toolbar
 
-### Step 3: Add to Your Browser
+### Firefox
 
-1. Create a new bookmark in your browser
-2. Give it a name like "Disable Pi-hole 1hr" or "Enable Pi-hole"
-3. Instead of a URL, paste the generated bookmarklet code
-4. Save the bookmark
+1. Download or clone this repository
+2. Open Firefox and navigate to `about:debugging#/runtime/this-firefox`
+3. Click "Load Temporary Add-on..."
+4. Navigate to the extension folder and select the `manifest.json` file
+5. The extension should now be installed and visible in your browser toolbar
 
-Now you can click the bookmark anytime to toggle your Pi-hole's blocking status!
+## Usage
 
-## Creating Multiple Bookmarklets
+1. Click on the Pi-hole v6 Controller icon in your browser toolbar
+2. Enter your Pi-hole URL (e.g., `http://pi.hole` or the IP address of your Pi-hole server)
+3. Enter your Pi-hole password
+4. Select a disable duration from the dropdown menu (only applies when disabling)
+5. Click "Enable Blocking" to enable Pi-hole DNS blocking
+6. Click "Disable Blocking" to disable Pi-hole DNS blocking for the selected duration
 
-Create multiple bookmarklets changing the `blockingStatus` and `timerDuration` values.
+## Development
 
-1. **Enable Pi-hole**: Set `blockingStatus: true` and `timerDuration: null`
-2. **Disable Pi-hole 1hr**: Set `blockingStatus: false` and `timerDuration: 3600` (or your preferred duration)
-3. **Disable Pi-hole 10min**: Set `blockingStatus: false` and `timerDuration: 600` (or your preferred duration)
-4. **Disable Pi-hole 1day**: Set `blockingStatus: false` and `timerDuration: 86400` (or your preferred duration)
+### Debugging with VS Code
 
-## Alert Messages
+This extension includes VS Code launch configurations for debugging in Chrome, Edge, and Firefox.
 
-When `includeSuccessAlert` is set to `true`, the bookmarklet will display an alert message after successfully changing the Pi-hole blocking status. If a timer duration is specified, the alert will include how long Pi-hole will be disabled.
+#### Prerequisites
 
-For example:
-- With `timerDuration: null`: "Pi-hole blocking has been disabled!"
-- With `timerDuration: 3600`: "Pi-hole blocking has been disabled for 1 hour!"
+Install the following VS Code extensions:
+- [JavaScript Debugger (ms-vscode.js-debug)](https://marketplace.visualstudio.com/items?itemName=ms-vscode.js-debug)
+- [Firefox Debugger (firefox-devtools.vscode-firefox-debug)](https://marketplace.visualstudio.com/items?itemName=firefox-devtools.vscode-firefox-debug)
 
-## Console Output
+#### Available Debug Configurations
 
-The bookmarklet logs information to your browser's console during execution. This can be helpful for troubleshooting or verifying that operations completed successfully. To view these logs, open your browser's developer tools (usually by pressing F12 or right-clicking and selecting "Inspect") and navigate to the Console tab.
+- **Debug Extension in Chrome**: Launches Chrome with the extension loaded (Program Files path)
+- **Debug Extension in Chrome (x86)**: Alternative for Chrome installed in Program Files (x86)
+- **Debug Extension in Chrome (LocalAppData)**: Alternative for Chrome installed in the user's AppData folder
+- **Debug Extension in Edge**: Launches Edge with the extension loaded
+- **Debug Extension in Firefox**: Launches Firefox with the extension loaded
+- **Debug Popup**: Opens the popup.html file directly in Chrome for easier UI debugging
+- **Attach to Background Script**: Attaches to the background script for debugging
+- **Debug Extension & Attach to Background**: Compound configuration that launches Chrome and attaches to the background script
 
-The following information is logged:
-- Authentication status and response data
-- Session ID acquisition
-- Blocking status update confirmation
-- Logout status (if `includeLogout` is enabled)
-- Any errors that occur during execution
+#### Troubleshooting Chrome Path Issues
 
-If you're experiencing issues with the bookmarklet, checking the console output can provide valuable information about what might be going wrong.
+If you encounter an error like "Unable to find chrome version", you may need to modify the `runtimeExecutable` path in the `.vscode/launch.json` file to match your Chrome installation path:
 
-## Session Management
+1. Run the included `find-chrome-path.bat` file (on Windows) to locate your Chrome installation
+2. Open `.vscode/launch.json`
+3. Find the Chrome configuration section
+4. Update the `runtimeExecutable` path to match your Chrome installation:
+   - Standard path: `"${env:ProgramFiles}\\Google\\Chrome\\Application\\chrome.exe"`
+   - Alternative path: `"${env:ProgramFiles(x86)}\\Google\\Chrome\\Application\\chrome.exe"`
+   - Local AppData path: `"${env:LOCALAPPDATA}\\Google\\Chrome\\Application\\chrome.exe"`
+   - Or use the full absolute path: `"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"`
 
-The `includeLogout` option controls whether the bookmarklet logs out the session after making the API call:
+You can also try one of the alternative Chrome configurations that are already set up:
+- "Debug Extension in Chrome (x86)" - Uses Program Files (x86) path
+- "Debug Extension in Chrome (LocalAppData)" - Uses the AppData/Local path
 
-- When set to `false` (default), the session remains active
-- When set to `true`, the bookmarklet will attempt to logout the session after changing the blocking status
+#### How to Debug
 
-**Note:** The logout feature may cause errors in some environments depending on where you run the bookmarklet from. If you experience issues, set `includeLogout` to `false`.
+1. Open the extension in VS Code
+2. Set breakpoints in your JavaScript files
+3. Press F5 or select a debug configuration from the Run and Debug panel
+4. The browser will launch with the extension loaded
+5. Interact with the extension to trigger your breakpoints
 
-## Security Note
+## Building for Distribution
 
-The bookmarklet contains your Pi-hole password. Be cautious about sharing your browser with others or syncing bookmarks across devices.
+### Chrome Web Store (Chrome and Edge)
 
-## References
+1. Zip the contents of the extension folder
+2. Submit the zip file to the Chrome Web Store Developer Dashboard
 
-- [Bookmarkleter Tool](https://chriszarate.github.io/bookmarkleter/)
-- [Pi-hole Documentation](https://docs.pi-hole.net/)
+### Firefox Add-ons (AMO)
+
+1. Zip the contents of the extension folder
+2. Submit the zip file to the Firefox Add-ons Developer Hub
+
+## Technical Details
+
+This extension uses:
+- Manifest V3 for Chrome, Edge, and Firefox
+- Browser API polyfill to ensure compatibility across browsers
+- Pi-hole v6 API for authentication and controlling blocking status
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- Pi-hole team for creating an excellent DNS-level ad blocker
+- Browser extension communities for guidance on cross-browser compatibility
