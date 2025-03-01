@@ -7,16 +7,17 @@
       "request": "launch",
       "runtimeExecutable": "${env:ProgramFiles}\\Google\\Chrome\\Application\\chrome.exe",
       "runtimeArgs": [
-        "--load-extension=${workspaceFolder}",
-        "--disable-extensions-except=${workspaceFolder}",
+        "--load-extension=${workspaceFolder}/dist",
+        "--disable-extensions-except=${workspaceFolder}/dist",
         "--no-first-run",
         "--no-default-browser-check"
       ],
       "userDataDir": "${workspaceFolder}/.vscode/chrome-debug-profile",
       "webRoot": "${workspaceFolder}",
       "sourceMapPathOverrides": {
-        "webpack:///src/*": "${webRoot}/*"
-      }
+        "webpack:///src/*": "${webRoot}/src/*"
+      },
+      "preLaunchTask": "npm: build"
     },
     {
       "name": "Debug Extension in Chrome (x86)",
@@ -24,16 +25,17 @@
       "request": "launch",
       "runtimeExecutable": "${env:ProgramFiles(x86)}\\Google\\Chrome\\Application\\chrome.exe",
       "runtimeArgs": [
-        "--load-extension=${workspaceFolder}",
-        "--disable-extensions-except=${workspaceFolder}",
+        "--load-extension=${workspaceFolder}/dist",
+        "--disable-extensions-except=${workspaceFolder}/dist",
         "--no-first-run",
         "--no-default-browser-check"
       ],
       "userDataDir": "${workspaceFolder}/.vscode/chrome-debug-profile-x86",
       "webRoot": "${workspaceFolder}",
       "sourceMapPathOverrides": {
-        "webpack:///src/*": "${webRoot}/*"
-      }
+        "webpack:///src/*": "${webRoot}/src/*"
+      },
+      "preLaunchTask": "npm: build"
     },
     {
       "name": "Debug Extension in Chrome (LocalAppData)",
@@ -41,16 +43,17 @@
       "request": "launch",
       "runtimeExecutable": "${env:LOCALAPPDATA}\\Google\\Chrome\\Application\\chrome.exe",
       "runtimeArgs": [
-        "--load-extension=${workspaceFolder}",
-        "--disable-extensions-except=${workspaceFolder}",
+        "--load-extension=${workspaceFolder}/dist",
+        "--disable-extensions-except=${workspaceFolder}/dist",
         "--no-first-run",
         "--no-default-browser-check"
       ],
       "userDataDir": "${workspaceFolder}/.vscode/chrome-debug-profile-local",
       "webRoot": "${workspaceFolder}",
       "sourceMapPathOverrides": {
-        "webpack:///src/*": "${webRoot}/*"
-      }
+        "webpack:///src/*": "${webRoot}/src/*"
+      },
+      "preLaunchTask": "npm: build"
     },
     {
       "name": "Debug Extension in Edge",
@@ -58,27 +61,28 @@
       "request": "launch",
       "runtimeExecutable": "msedge",
       "runtimeArgs": [
-        "--load-extension=${workspaceFolder}",
-        "--disable-extensions-except=${workspaceFolder}",
+        "--load-extension=${workspaceFolder}/dist",
+        "--disable-extensions-except=${workspaceFolder}/dist",
         "--no-first-run",
         "--no-default-browser-check"
       ],
       "userDataDir": "${workspaceFolder}/.vscode/edge-debug-profile",
       "webRoot": "${workspaceFolder}",
       "sourceMapPathOverrides": {
-        "webpack:///src/*": "${webRoot}/*"
-      }
+        "webpack:///src/*": "${webRoot}/src/*"
+      },
+      "preLaunchTask": "npm: build"
     },
-
     {
       "name": "Debug Popup",
       "type": "chrome",
       "request": "launch",
-      "url": "${workspaceFolder}/popup.html",
+      "url": "${workspaceFolder}/dist/popup.html",
       "webRoot": "${workspaceFolder}",
       "sourceMapPathOverrides": {
-        "webpack:///src/*": "${webRoot}/*"
-      }
+        "webpack:///src/*": "${webRoot}/src/*"
+      },
+      "preLaunchTask": "npm: build"
     },
     {
       "name": "Attach to Background Script",
@@ -87,7 +91,7 @@
       "port": 9222,
       "webRoot": "${workspaceFolder}",
       "sourceMapPathOverrides": {
-        "webpack:///src/*": "${webRoot}/*"
+        "webpack:///src/*": "${webRoot}/src/*"
       }
     }
   ],

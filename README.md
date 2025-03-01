@@ -1,113 +1,158 @@
 # Pi-hole v6 Controller Browser Extension
 
-A browser extension that allows you to control your Pi-hole v6 blocking status directly from your browser. This extension works with Chrome, Edge, and Firefox.
+A browser extension to control your Pi-hole v6 blocking status directly from your browser. This extension has been updated to use React with TypeScript and is **ONLY compatible with Pi-hole v6 and newer versions**.
 
 ## Features
 
-- Enable/disable Pi-hole DNS blocking with a single click
-- Set custom disable duration (permanent, 5 minutes, 10 minutes, 30 minutes, 1 hour, 2 hours, or 1 day)
-- Securely store your Pi-hole URL and password in your browser's storage
-- Works with Pi-hole v6 API
+- Enable/disable Pi-hole blocking
+- Set custom disable duration
+- Save Pi-hole URL and password
+- Modern React-based UI
+- TypeScript for type safety
+- Secure encryption of sensitive user data
+- Support for Pi-hole v6 API authentication pattern
+- **Exclusively designed for Pi-hole v6 and newer**
 
-## Installation
+## Security Features
 
-### Chrome and Edge
+### Encryption of User Data
 
-1. Download or clone this repository
-2. Open Chrome/Edge and navigate to `chrome://extensions` (Chrome) or `edge://extensions` (Edge)
-3. Enable "Developer mode" in the top-right corner
-4. Click "Load unpacked" and select the folder containing the extension files
-5. The extension should now be installed and visible in your browser toolbar
+This extension implements robust encryption to protect your Pi-hole credentials:
 
-### Firefox
+- Uses the Web Crypto API with AES-GCM encryption algorithm
+- Generates a unique encryption key for each extension installation
+- Securely stores the encryption key using browser storage
+- Implements PBKDF2 key derivation with a unique salt for enhanced security
+- Encrypts your Pi-hole password before storing it in browser storage
 
-1. Download or clone this repository
-2. Open Firefox and navigate to `about:debugging#/runtime/this-firefox`
-3. Click "Load Temporary Add-on..."
-4. Navigate to the extension folder and select the `manifest.json` file
-5. The extension should now be installed and visible in your browser toolbar
+### Pi-hole v6 API Authentication
 
-## Usage
+The extension uses the updated authentication pattern for Pi-hole v6:
 
-1. Click on the Pi-hole v6 Controller icon in your browser toolbar
-2. Enter your Pi-hole URL (e.g., `http://pi.hole` or the IP address of your Pi-hole server)
-3. Enter your Pi-hole password
-4. Select a disable duration from the dropdown menu (only applies when disabling)
-5. Click "Enable Blocking" to enable Pi-hole DNS blocking
-6. Click "Disable Blocking" to disable Pi-hole DNS blocking for the selected duration
+1. **Login Process**:
+   - Authenticates with the Pi-hole API using a POST request to `/api/auth`
+   - Receives a session ID (SID) that's used for subsequent API calls
+   - Includes proper headers and error handling for reliable connections
+
+2. **API Interaction**:
+   - Uses the session ID in the `X-FTL-SID` header for authenticated requests
+   - Communicates with the blocking API at `/api/dns/blocking`
+   - Supports custom disable durations with proper timer formatting
+
+3. **Logout Process**:
+   - Properly terminates the session with a DELETE request to `/api/auth`
+   - Ensures your Pi-hole session is securely closed when done
+   - 
+
+## Important Note for Pi-hole Compatibility
+
+**This extension is ONLY compatible with Pi-hole v6 and newer versions.** It will not work with Pi-hole v5 or earlier as it uses the new API authentication pattern introduced in Pi-hole v6.
+
+If you've upgraded from Pi-hole 5 or below to Pi-hole 6, you might encounter connection issues with this extension. This is because:
+
+- In Pi-hole 5 and below, the web interface typically ran on port 80
+- After upgrading to Pi-hole 6, lighttpd might still be running on port 80, while the Pi-hole web interface runs on port 8080
+
+In this configuration, the extension cannot connect to Pi-hole unless you have a valid SSL certificate set up for your Pi-hole. To resolve this issue, you can:
+
+1. Stop the lighttpd service:
+   ```bash
+   sudo service lighttpd stop
+   ```
+
+2. Uninstall lighttpd:
+   ```bash
+   sudo apt remove lighttpd
+   ```
+
+3. Configure Pi-hole to use port 80 :
+   ```bash
+   sudo pihole-FTL --config webserver.port 80
+   ```
+
+This will allow the extension to connect directly to your Pi-hole on the standard HTTP port.
 
 ## Development
 
-### Debugging with VS Code
+### Prerequisites
 
-This extension includes VS Code launch configurations for debugging in Chrome, Edge, and Firefox.
+- Node.js (v14 or later)
+- npm or yarn
 
-#### Prerequisites
+### Setup
 
-Install the following VS Code extensions:
-- [JavaScript Debugger (ms-vscode.js-debug)](https://marketplace.visualstudio.com/items?itemName=ms-vscode.js-debug)
-- [Firefox Debugger (firefox-devtools.vscode-firefox-debug)](https://marketplace.visualstudio.com/items?itemName=firefox-devtools.vscode-firefox-debug)
+1. Clone this repository
+2. Install dependencies:
 
-#### Available Debug Configurations
+```bash
+npm install
+# or
+yarn install
+```
 
-- **Debug Extension in Chrome**: Launches Chrome with the extension loaded (Program Files path)
-- **Debug Extension in Chrome (x86)**: Alternative for Chrome installed in Program Files (x86)
-- **Debug Extension in Chrome (LocalAppData)**: Alternative for Chrome installed in the user's AppData folder
-- **Debug Extension in Edge**: Launches Edge with the extension loaded
-- **Debug Extension in Firefox**: Launches Firefox with the extension loaded
-- **Debug Popup**: Opens the popup.html file directly in Chrome for easier UI debugging
-- **Attach to Background Script**: Attaches to the background script for debugging
-- **Debug Extension & Attach to Background**: Compound configuration that launches Chrome and attaches to the background script
+### Development Build
 
-#### Troubleshooting Chrome Path Issues
+To build the extension in development mode with watch mode:
 
-If you encounter an error like "Unable to find chrome version", you may need to modify the `runtimeExecutable` path in the `.vscode/launch.json` file to match your Chrome installation path:
+```bash
+npm start
+# or
+yarn start
+```
 
-1. Run the included `find-chrome-path.bat` file (on Windows) to locate your Chrome installation
-2. Open `.vscode/launch.json`
-3. Find the Chrome configuration section
-4. Update the `runtimeExecutable` path to match your Chrome installation:
-   - Standard path: `"${env:ProgramFiles}\\Google\\Chrome\\Application\\chrome.exe"`
-   - Alternative path: `"${env:ProgramFiles(x86)}\\Google\\Chrome\\Application\\chrome.exe"`
-   - Local AppData path: `"${env:LOCALAPPDATA}\\Google\\Chrome\\Application\\chrome.exe"`
-   - Or use the full absolute path: `"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"`
+This will create a `dist` folder with the extension files and watch for changes.
 
-You can also try one of the alternative Chrome configurations that are already set up:
-- "Debug Extension in Chrome (x86)" - Uses Program Files (x86) path
-- "Debug Extension in Chrome (LocalAppData)" - Uses the AppData/Local path
+### Production Build
 
-#### How to Debug
+To build the extension for production:
 
-1. Open the extension in VS Code
-2. Set breakpoints in your JavaScript files
-3. Press F5 or select a debug configuration from the Run and Debug panel
-4. The browser will launch with the extension loaded
-5. Interact with the extension to trigger your breakpoints
+```bash
+npm run build
+# or
+yarn build
+```
 
-## Building for Distribution
+## Loading the Extension
 
-### Chrome Web Store (Chrome and Edge)
+### Chrome
 
-1. Zip the contents of the extension folder
-2. Submit the zip file to the Chrome Web Store Developer Dashboard
+1. Open Chrome and navigate to `chrome://extensions/`
+2. Enable "Developer mode" in the top right
+3. Click "Load unpacked" and select the `dist` folder
 
-### Firefox Add-ons (AMO)
+### Firefox
 
-1. Zip the contents of the extension folder
-2. Submit the zip file to the Firefox Add-ons Developer Hub
+1. Open Firefox and navigate to `about:debugging#/runtime/this-firefox`
+2. Click "Load Temporary Add-on..."
+3. Select any file in the `dist` folder
+
+## Usage
+
+1. Click on the Pi-hole extension icon in your browser toolbar
+2. Enter your Pi-hole URL (e.g., `http://pi.hole` or the IP address)
+3. Enter your Pi-hole password
+4. Select a disable duration (if needed)
+5. Click "Enable Blocking" or "Disable Blocking" as needed
 
 ## Technical Details
 
 This extension uses:
-- Manifest V3 for Chrome, Edge, and Firefox
-- Browser API polyfill to ensure compatibility across browsers
-- Pi-hole v6 API for authentication and controlling blocking status
+
+- React for the UI
+- TypeScript for type safety
+- Webpack for bundling
+- Browser extension polyfill for cross-browser compatibility
+- Web Crypto API for secure encryption
+- XMLHttpRequest for direct API communication
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+[MIT License](LICENSE)
 
-## Acknowledgments
+## Contributing
 
-- Pi-hole team for creating an excellent DNS-level ad blocker
-- Browser extension communities for guidance on cross-browser compatibility
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Acknowledgements
+
+This extension is designed to work **exclusively with Pi-hole v6 and newer versions** and uses the new API authentication pattern introduced in Pi-hole v6 to control blocking status.
