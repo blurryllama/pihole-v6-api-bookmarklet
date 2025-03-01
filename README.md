@@ -20,14 +20,19 @@ A browser extension to control your Pi-hole v6 blocking status directly from you
 4. Enable "Developer mode" in the top right
 5. Click "Load unpacked" and select the extracted folder or the `dist` folder from the repository
 
-#### Firefox
+#### Firefox (Developer Edition or Nightly only)
 
 1. Download the `pihole-v6-controller.zip` file from the releases section
-2. Open Firefox and navigate to `about:addons`
-3. Click the gear icon and select "Install Add-on From File..."
-4. Select the downloaded zip file
+2. Open Firefox Developer Edition or Nightly and navigate to `about:config`
+3. Search for `xpinstall.signatures.required` and set it to `false`
+4. Navigate to `about:addons`
+5. Click the gear icon and select "Install Add-on From File..."
+6. Select the downloaded zip file
 
-#### Edge (basically same as Chrome Instructions)
+Note: In the future, we plan to have this extension signed and available for regular Firefox versions through the Mozilla Add-ons store. Until then, you'll need to use Firefox Developer Edition or Nightly as described above.
+
+
+#### Edge
 
 1. Download the `pihole-v6-controller.zip` file from the releases section
 2. Extract the zip file to a folder
@@ -44,17 +49,9 @@ A browser extension to control your Pi-hole v6 blocking status directly from you
 4. Select a disable duration (if needed)
 5. Click "Enable Blocking" or "Disable Blocking" as needed
 
-### Known Issues
+## Known Issues
 
-**Browser Cookie Conflict**: If you are using the same browser and same URL to access both the extension and the Pi-hole web UI at the same time, you may notice that after disabling or enabling blocking through the extension, the web UI will be logged out. This is because both interfaces use the same authentication cookies.
-
-**Recommended Solution**: If this issue bothers you, we recommend using different URLs for each interface:
-- Use the `pi.hole` domain for accessing the Pi-hole web UI
-- Use the LAN IP address (e.g., `192.168.1.x`) for the extension
-  
-This way, there will be no overlap in authentication cookies between the interfaces.
-
-## Important Note for Pi-hole Compatibility
+### Important Note for Pi-hole Compatibility
 
 **This extension is ONLY compatible with Pi-hole v6 and newer versions.** It will not work with Pi-hole v5 or earlier as it uses the new API authentication pattern introduced in Pi-hole v6.
 
@@ -81,6 +78,14 @@ In this configuration, the extension cannot connect to Pi-hole unless you have a
    ```
 
 This will allow the extension to connect directly to your Pi-hole on the standard HTTP port.
+
+**Browser Cookie Conflict**: If you are using the same browser and same URL to access both the extension and the Pi-hole web UI at the same time, you may notice that after disabling or enabling blocking through the extension, the web UI will be logged out. This is because both interfaces use the same authentication cookies.
+
+**Recommended Solution**: If this issue bothers you, we recommend using different URLs for each interface:
+- Use the `pi.hole` domain for accessing the Pi-hole web UI
+- Use the LAN IP address (e.g., `192.168.1.x`) for the extension
+  
+This way, there will be no overlap in authentication cookies between the interfaces.
 
 ## Features
 
