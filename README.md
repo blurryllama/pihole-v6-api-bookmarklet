@@ -15,7 +15,7 @@ A browser extension to control your Pi-hole v6 blocking status directly from you
 #### Chrome
 
 1. Download the `pihole-v6-controller.zip` file from the releases section
-2. Extract the zip file to a folder (optional)
+2. Extract the zip file to a folder
 3. Open Chrome and navigate to `chrome://extensions/`
 4. Enable "Developer mode" in the top right
 5. Click "Load unpacked" and select the extracted folder or the `dist` folder from the repository
@@ -26,6 +26,15 @@ A browser extension to control your Pi-hole v6 blocking status directly from you
 2. Open Firefox and navigate to `about:addons`
 3. Click the gear icon and select "Install Add-on From File..."
 4. Select the downloaded zip file
+
+#### Edge (basically same as Chrome Instructions)
+
+1. Download the `pihole-v6-controller.zip` file from the releases section
+2. Extract the zip file to a folder
+3. Open Edge and navigate to `edge://extensions/`
+4. Enable "Developer mode" using the toggle at the bottom left
+5. Click "Load unpacked" and select the extracted folder or the `dist` folder from the repository
+
 
 ### Using the Extension
 
@@ -206,18 +215,3 @@ For maintainers, to create a new release:
    - Add a release title and description
    - Upload the generated `pihole-v6-controller.zip` file
    - Publish the release
-
-### Automated Release (GitHub Actions)
-This repository includes a GitHub Actions workflow that automatically builds and releases the extension when a new tag is pushed:
-
-1. Update the version in package.json
-2. Commit your changes
-3. Create and push a new tag:
-   ```bash
-   git tag v1.0.0  # Replace with your version
-   git push origin v1.0.0
-   ```
-4. The GitHub Actions workflow will automatically:
-   - Build the extension
-   - Create a zip file
-   - Create a new GitHub Release with the zip file attached
