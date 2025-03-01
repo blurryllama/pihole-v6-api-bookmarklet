@@ -12,8 +12,6 @@
   const includeSuccessAlert = false; // set to true to show an alert after the blocking status is set
   const includeErrorAlert = false; // set to true to show an alert after the blocking status is set
 
- // Create the authentication payload
-  // Create the authentication payload
   const authPayload = {
     password: password
   };
