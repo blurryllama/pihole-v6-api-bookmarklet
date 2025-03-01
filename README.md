@@ -2,6 +2,77 @@
 
 A browser extension to control your Pi-hole v6 blocking status directly from your browser. This extension has been updated to use React with TypeScript and is **ONLY compatible with Pi-hole v6 and newer versions**.
 
+## Installation and Usage
+
+### Installing the Extension
+
+#### From the GitHub Releases
+
+1. Go to the "Releases" section of the GitHub repository
+2. Download the `pihole-v6-controller.zip` file from the latest release
+3. Follow the browser-specific instructions below
+
+#### Chrome
+
+1. Download the `pihole-v6-controller.zip` file from the releases section
+2. Extract the zip file to a folder (optional)
+3. Open Chrome and navigate to `chrome://extensions/`
+4. Enable "Developer mode" in the top right
+5. Click "Load unpacked" and select the extracted folder or the `dist` folder from the repository
+
+#### Firefox
+
+1. Download the `pihole-v6-controller.zip` file from the releases section
+2. Open Firefox and navigate to `about:addons`
+3. Click the gear icon and select "Install Add-on From File..."
+4. Select the downloaded zip file
+
+### Using the Extension
+
+1. Click on the Pi-hole extension icon in your browser toolbar
+2. Enter your Pi-hole URL (e.g., `http://pi.hole` or the IP address)
+3. Enter your Pi-hole password
+4. Select a disable duration (if needed)
+5. Click "Enable Blocking" or "Disable Blocking" as needed
+
+### Known Issues
+
+**Browser Cookie Conflict**: If you are using the same browser and same URL to access both the extension and the Pi-hole web UI at the same time, you may notice that after disabling or enabling blocking through the extension, the web UI will be logged out. This is because both interfaces use the same authentication cookies.
+
+**Recommended Solution**: If this issue bothers you, we recommend using different URLs for each interface:
+- Use the `pi.hole` domain for accessing the Pi-hole web UI
+- Use the LAN IP address (e.g., `192.168.1.x`) for the extension
+  
+This way, there will be no overlap in authentication cookies between the interfaces.
+
+## Important Note for Pi-hole Compatibility
+
+**This extension is ONLY compatible with Pi-hole v6 and newer versions.** It will not work with Pi-hole v5 or earlier as it uses the new API authentication pattern introduced in Pi-hole v6.
+
+If you've upgraded from Pi-hole 5 or below to Pi-hole 6, you might encounter connection issues with this extension. This is because:
+
+- In Pi-hole 5 and below, the web interface typically ran on port 80
+- After upgrading to Pi-hole 6, lighttpd might still be running on port 80, while the Pi-hole web interface runs on port 8080
+
+In this configuration, the extension cannot connect to Pi-hole unless you have a valid SSL certificate set up for your Pi-hole. To resolve this issue, you can:
+
+1. Stop the lighttpd service:
+   ```bash
+   sudo service lighttpd stop
+   ```
+
+2. Uninstall lighttpd:
+   ```bash
+   sudo apt remove lighttpd
+   ```
+
+3. Configure Pi-hole to use port 80:
+   ```bash
+   sudo pihole-FTL --config webserver.port 80
+   ```
+
+This will allow the extension to connect directly to your Pi-hole on the standard HTTP port.
+
 ## Features
 
 - Enable/disable Pi-hole blocking
@@ -42,35 +113,6 @@ The extension uses the updated authentication pattern for Pi-hole v6:
 3. **Logout Process**:
    - Properly terminates the session with a DELETE request to `/api/auth`
    - Ensures your Pi-hole session is securely closed when done
-   - 
-
-## Important Note for Pi-hole Compatibility
-
-**This extension is ONLY compatible with Pi-hole v6 and newer versions.** It will not work with Pi-hole v5 or earlier as it uses the new API authentication pattern introduced in Pi-hole v6.
-
-If you've upgraded from Pi-hole 5 or below to Pi-hole 6, you might encounter connection issues with this extension. This is because:
-
-- In Pi-hole 5 and below, the web interface typically ran on port 80
-- After upgrading to Pi-hole 6, lighttpd might still be running on port 80, while the Pi-hole web interface runs on port 8080
-
-In this configuration, the extension cannot connect to Pi-hole unless you have a valid SSL certificate set up for your Pi-hole. To resolve this issue, you can:
-
-1. Stop the lighttpd service:
-   ```bash
-   sudo service lighttpd stop
-   ```
-
-2. Uninstall lighttpd:
-   ```bash
-   sudo apt remove lighttpd
-   ```
-
-3. Configure Pi-hole to use port 80 :
-   ```bash
-   sudo pihole-FTL --config webserver.port 80
-   ```
-
-This will allow the extension to connect directly to your Pi-hole on the standard HTTP port.
 
 ## Development
 
@@ -123,28 +165,6 @@ yarn build-zip
 ```
 
 This will create a `pihole-v6-controller.zip` file in the root directory that can be directly installed in browsers that support installing extensions from zip files.
-
-## Loading the Extension
-
-### Chrome
-
-1. Open Chrome and navigate to `chrome://extensions/`
-2. Enable "Developer mode" in the top right
-3. Click "Load unpacked" and select the `dist` folder
-
-### Firefox
-
-1. Open Firefox and navigate to `about:debugging#/runtime/this-firefox`
-2. Click "Load Temporary Add-on..."
-3. Select any file in the `dist` folder
-
-## Usage
-
-1. Click on the Pi-hole extension icon in your browser toolbar
-2. Enter your Pi-hole URL (e.g., `http://pi.hole` or the IP address)
-3. Enter your Pi-hole password
-4. Select a disable duration (if needed)
-5. Click "Enable Blocking" or "Disable Blocking" as needed
 
 ## Technical Details
 
@@ -201,25 +221,3 @@ This repository includes a GitHub Actions workflow that automatically builds and
    - Build the extension
    - Create a zip file
    - Create a new GitHub Release with the zip file attached
-
-For users, to install the extension:
-1. Go to the "Releases" section of the GitHub repository
-2. Download the `pihole-v6-controller.zip` file from the latest release
-3. Follow the installation instructions in the "Installation from Zip" section below
-
-## Installation from Zip
-
-### Chrome
-
-1. Download the `pihole-v6-controller.zip` file from the releases section
-2. Extract the zip file to a folder (optional)
-3. Open Chrome and navigate to `chrome://extensions/`
-4. Enable "Developer mode" in the top right
-5. Click "Load unpacked" and select the extracted folder or the `dist` folder from the repository
-
-### Firefox
-
-1. Download the `pihole-v6-controller.zip` file from the releases section
-2. Open Firefox and navigate to `about:addons`
-3. Click the gear icon and select "Install Add-on From File..."
-4. Select the downloaded zip file
