@@ -9,8 +9,8 @@
   const blockingStatus = false; // true to enable blocking, false to disable
   const includeLogout = false; // set to true to logout the session authorized to make this call after the blocking status is set
   // *includeLogout may give you errors depending on where you run the bookmarklet from
-  const includeSuccessAlert = false; // set to true to show an alert after the blocking status is set
-  const includeErrorAlert = false; // set to true to show an alert after the blocking status is set
+  const includeSuccessAlert = true; // set to true to show an alert after the blocking status is set
+  const includeErrorAlert = true; // set to true to show an alert after the blocking status is set
 
   const authPayload = {
     password: password

@@ -13,8 +13,8 @@ This repository provides a simple way to control your Pi-hole v6 using bookmarkl
    - `timerDuration`: How long to disable Pi-hole (in seconds), or set to `null` for permanent change
    - `blockingStatus`: Set to `true` to enable blocking or `false` to disable blocking
    - `includeLogout`: Set to `true` to logout the session after the API call (default is `false`)
-   - `includeSuccessAlert`: Set to `true` to show a success alert message (default is `false`)
-   - `includeErrorAlert`: Set to `true` to show an error alert message if the operation fails (default is `false`)
+   - `includeSuccessAlert`: Set to `true` to show a success alert message (default is `true`)
+   - `includeErrorAlert`: Set to `true` to show an error alert message if the operation fails (default is `true`)
 
 ### Step 2: Create the Bookmarklet
 
