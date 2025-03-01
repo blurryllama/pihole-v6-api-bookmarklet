@@ -112,6 +112,18 @@ npm run build
 yarn build
 ```
 
+### Build with Zip
+
+To build the extension and create a zip file for easy distribution:
+
+```bash
+npm run build-zip
+# or
+yarn build-zip
+```
+
+This will create a `pihole-v6-controller.zip` file in the root directory that can be directly installed in browsers that support installing extensions from zip files.
+
 ## Loading the Extension
 
 ### Chrome
@@ -156,3 +168,58 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## Acknowledgements
 
 This extension is designed to work **exclusively with Pi-hole v6 and newer versions** and uses the new API authentication pattern introduced in Pi-hole v6 to control blocking status.
+
+## GitHub Releases
+
+For maintainers, to create a new release:
+
+### Manual Release
+1. Run the build-zip script to generate the extension package:
+   ```bash
+   npm run build-zip
+   ```
+
+2. Create a new GitHub Release:
+   - Go to the repository's "Releases" section
+   - Click "Draft a new release"
+   - Set a tag version (e.g., v1.0.0)
+   - Add a release title and description
+   - Upload the generated `pihole-v6-controller.zip` file
+   - Publish the release
+
+### Automated Release (GitHub Actions)
+This repository includes a GitHub Actions workflow that automatically builds and releases the extension when a new tag is pushed:
+
+1. Update the version in package.json
+2. Commit your changes
+3. Create and push a new tag:
+   ```bash
+   git tag v1.0.0  # Replace with your version
+   git push origin v1.0.0
+   ```
+4. The GitHub Actions workflow will automatically:
+   - Build the extension
+   - Create a zip file
+   - Create a new GitHub Release with the zip file attached
+
+For users, to install the extension:
+1. Go to the "Releases" section of the GitHub repository
+2. Download the `pihole-v6-controller.zip` file from the latest release
+3. Follow the installation instructions in the "Installation from Zip" section below
+
+## Installation from Zip
+
+### Chrome
+
+1. Download the `pihole-v6-controller.zip` file from the releases section
+2. Extract the zip file to a folder (optional)
+3. Open Chrome and navigate to `chrome://extensions/`
+4. Enable "Developer mode" in the top right
+5. Click "Load unpacked" and select the extracted folder or the `dist` folder from the repository
+
+### Firefox
+
+1. Download the `pihole-v6-controller.zip` file from the releases section
+2. Open Firefox and navigate to `about:addons`
+3. Click the gear icon and select "Install Add-on From File..."
+4. Select the downloaded zip file

@@ -4,7 +4,8 @@
   "description": "Control your Pi-hole v6 blocking status directly from your browser",
   "scripts": {
     "start": "webpack --watch --config webpack.config.js",
-    "build": "webpack --config webpack.config.js"
+    "build": "webpack --config webpack.config.js",
+    "build-zip": "npm run build && rimraf pihole-v6-controller.zip && node scripts/create-zip.js"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -14,14 +15,16 @@
   "devDependencies": {
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
-    "@types/webextension-polyfill": "^0.10.0",
+    "@types/webextension-polyfill": "^0.10.7",
+    "adm-zip": "^0.5.16",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.8.1",
     "html-webpack-plugin": "^5.5.3",
+    "rimraf": "^5.0.10",
     "style-loader": "^3.3.3",
     "ts-loader": "^9.4.4",
     "typescript": "^5.1.6",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4"
   }
-} 
+}
